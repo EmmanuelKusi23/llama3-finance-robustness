@@ -1,0 +1,172 @@
+# Configuration for LLaMA 3 Finance Robustness Benchmarking
+# Author: Emmanuel Kwadwo Kusi
+
+# Project Settings
+project:
+  name: "llama3-finance-robustness"
+  version: "1.0.0"
+  random_seed: 42
+
+# Data Settings
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  prompts_dir: "data/prompts"
+
+  datasets:
+    - name: "finqa"
+      source: "ibm/finqa"
+      max_samples: 5000
+    - name: "alpaca_finance"
+      source: "gbharti/finance-alpaca"
+      max_samples: 5000
+    - name: "billsum"
+      source: "billsum"
+      max_samples: 2000
+
+  seed_prompts:
+    count: 50
+    sampling_strategy: "stratified"  # stratified, random, balanced
+
+# Prompt Generation Settings
+prompt_generation:
+  num_variants: 10
+  paraphrase_method: "both"  # backtranslation, t5, both
+  min_similarity: 0.85
+
+  translation:
+    source_lang: "en"
+    intermediate_lang: "fr"
+    model: "Helsinki-NLP/opus-mt-en-fr"
+
+  t5:
+    model: "t5-base"
+    temperature: 1.2
+    top_p: 0.95
+    num_beams: 5
+
+# LLM Sampling Settings
+llm_sampling:
+  model:
+    name: "meta-llama/Meta-Llama-3-8B-Instruct"
+    quantization: "4bit"  # 4bit, 8bit, none
+    device: "auto"  # auto, cuda, cpu
+
+  sampling:
+    num_samples: 20
+    temperature: 0.7
+    top_p: 0.9
+    top_k: 50
+    max_new_tokens: 512
+
+  system_prompt: >
+    You are a financial AI assistant. Provide accurate, clear,
+    and helpful responses to financial questions.
+
+# Semantic Entropy Settings
+entropy:
+  embedder:
+    model: "sentence-transformers/all-MiniLM-L6-v2"
+    device: "auto"
+
+  clustering:
+    method: "hdbscan"  # hdbscan, kmeans, dbscan
+    min_cluster_size: 2
+    min_samples: 1
+
+  kmeans:
+    max_k: 10
+    selection: "silhouette"  # silhouette, elbow
+
+  dbscan:
+    eps: "auto"
+    min_samples: 2
+
+# Robustness Metric Settings
+robustness:
+  entropy_weight: 1.0
+
+  categories:
+    very_robust: 0.8
+    robust: 0.6
+    moderate: 0.4
+    weak: 0.2
+
+# Visualization Settings
+visualization:
+  style: "whitegrid"
+  context: "paper"
+  palette: "viridis"
+
+  figure_size:
+    width: 12
+    height: 8
+
+  dpi: 300
+  format: "png"
+
+  plots:
+    - entropy_heatmap
+    - robustness_distribution
+    - entropy_vs_robustness
+    - top_bottom_prompts
+    - interactive_dashboard
+
+# Output Settings
+output:
+  results_dir: "results"
+
+  subdirs:
+    raw_outputs: "results/raw_outputs"
+    metrics: "results/metrics"
+    figures: "results/figures"
+    reports: "results/reports"
+
+  save_formats:
+    - csv
+    - json
+
+  checkpoints:
+    enabled: true
+    frequency: 100  # save every N samples
+
+# Logging Settings
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/experiment.log"
+
+# Experiment Tracking
+experiment:
+  track_metrics: true
+  save_intermediate: true
+
+  metrics_to_track:
+    - mean_entropy
+    - mean_robustness
+    - stability_score
+    - processing_time
+
+  wandb:
+    enabled: false
+    project: "llama3-finance-robustness"
+    entity: null
+
+# Model Comparison (Optional)
+comparison:
+  enabled: false
+
+  models:
+    - name: "llama3-8b"
+      path: "meta-llama/Meta-Llama-3-8B-Instruct"
+    # - name: "gpt-4"
+    #   api_key_env: "OPENAI_API_KEY"
+    # - name: "claude-3"
+    #   api_key_env: "ANTHROPIC_API_KEY"
+
+# Resource Limits
+resources:
+  max_workers: 4
+  batch_size: 8
+  max_memory_gb: 16
+  timeout_seconds: 300
