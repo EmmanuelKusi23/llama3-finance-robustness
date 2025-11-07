@@ -115,7 +115,7 @@ llama3-finance-robustness/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/llama3-finance-robustness.git
+git clone https://github.com/EmmanuelKusi23/llama3-finance-robustness.git
 cd llama3-finance-robustness
 
 # Create virtual environment
@@ -309,9 +309,9 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 ## Author
 
 **Emmanuel Kwadwo Kusi**
-- LinkedIn: [Your Profile](https://linkedin.com/in/yourprofile)
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- LinkedIn: [Emmanuel Kusi](https://linkedin.com/in/emmanuelkusi23)
+- GitHub: [@EmmanuelKusi23](https://github.com/EmmanuelKusi23)
+- Email: emmadata287uk@gmail.com
 
 ## Acknowledgments
 
